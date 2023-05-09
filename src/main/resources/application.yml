@@ -1,0 +1,14 @@
+app:
+  base:
+    config:
+      albedo:
+        app_name: TESTING
+
+spring:
+  main:
+    web-application-type: none
+
+logging:
+  config: classpath:log4j2/log4j2_serverTest.json
+  intervalloDiLogRecordLetti: 1000
+

@@ -1,0 +1,92 @@
+
+{
+  "configuration": {
+    "properties": {
+      "property": [
+        {
+          "name": "projectName",
+          "value": "testing"
+        },
+        {
+          "name": "plainFilename",
+          "value": "${projectName}.log"
+        },
+        {
+          "name": "pattern",
+          "value": "%d  %level %X{distributedInfos} [%c] - %m%n"
+        },
+        {
+          "name": "consolePattern",
+          "value": "%d %highlight{%5level} %style{%pid}{Blue} --- %X{distributedInfos} [%c] - %m%n"
+        },
+        {
+          "name": "logPath",
+          "value": "/appl/${sys:spring.profiles.active:-/build}/${projectName}/logs/"
+        },
+        {
+          "name": "historyPath",
+          "value": "${logPath}/history"
+        }
+      ]
+    },
+    "appenders": {
+      "appender": [
+        {
+          "type": "Console",
+          "name": "stdout",
+          "target": "SYSTEM_OUT",
+          "PatternLayout": {
+            "disableAnsi": "false",
+            "pattern": "${consolePattern}"
+          }
+        },
+        {
+          "type": "RollingFile",
+          "name": "file",
+          "fileName": "${logPath}/${plainFilename}",
+          "filePattern": "${historyPath}/${plainFilename}.%d{yyyy-MM-dd}-%i.zip",
+          "PatternLayout": {
+            "pattern": "${pattern}"
+          },
+          "Policies": {
+            "TimeBasedTriggeringPolicy": {
+              "interval": "1",
+              "modulate": "true"
+            },
+            "SizeBasedTriggeringPolicy": {
+              "size": "250 MB"
+            }
+          },
+          "DefaultRolloverStrategy": {
+            "Delete": {
+              "basePath": "${historyPath}",
+              "PathConditions": [
+                {
+                  "type": "IfFileName",
+                  "glob": "${plainFilename}.*.zip"
+                },
+                {
+                  "type": "IfLastModified",
+                  "age": "10d"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "loggers": {
+      "root": {
+        "level": "INFO",
+        "appenderRef": [
+          {
+            "ref": "stdout"
+          },
+          {
+            "ref": "file"
+          }
+        ]
+      }
+    }
+  }
+}

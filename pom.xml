@@ -1,41 +1,319 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.11</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.addvalue.demo</groupId>
-	<artifactId>testing</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>testing</name>
-	<description>Progetto addvalue demo testing</description>
-	<properties>
-		<java.version>1.8</java.version>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.7.11</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+  <groupId>com.addvalue.demo</groupId>
+  <artifactId>testing</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>testing</name>
+  <description>Progetto addvalue demo testing</description>
+  <properties>
+    <java.version>1.8</java.version>
+    <appassembler-maven-plugin.version>2.0.0</appassembler-maven-plugin.version>
+    <fmt-maven-plugin.version>2.9</fmt-maven-plugin.version>
+    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+    <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <!-- Logstash -->
+    <logstash-logback-encoder.version>6.5</logstash-logback-encoder.version>
+    <janino.version>3.1.2</janino.version>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+    <!-- Apache Commons -->
+    <commons-lang.version>2.6</commons-lang.version>
+    <commons-lang3.version>3.12.0</commons-lang3.version>
+    <commons-collections4.version>4.4</commons-collections4.version>
+    <commons-io.version>2.8.0</commons-io.version>
+    <apache-commons-validator.version>1.7</apache-commons-validator.version>
+
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-log4j2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-batch</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.batch</groupId>
+      <artifactId>spring-batch-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>4.7.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Driver H2 -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${h2.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Lombok -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+    </dependency>
+
+    <!-- Apache Commons -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${commons-lang3.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+      <version>${commons-collections4.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${commons-io.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>${apache-commons-validator.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.iban4j</groupId>
+      <artifactId>iban4j</artifactId>
+      <version>3.2.1</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>com.coveo</groupId>
+        <artifactId>fmt-maven-plugin</artifactId>
+        <version>${fmt-maven-plugin.version}</version>
+        <configuration>
+          <verbose>true</verbose>
+          <filesNamePattern>.*\.java</filesNamePattern>
+          <skip>false</skip>
+          <skipSortingImports>true</skipSortingImports>
+          <style>google</style>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>format</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <!-- Surefire Plugin is used during the test phase of the build lifecycle
+        to execute the unit tests of an application -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <useSystemClassLoader>false</useSystemClassLoader>
+          <properties>
+            <configurationParameters xml:space="preserve">
+                    junit.jupiter.conditions.deactivate = *
+                    junit.jupiter.extensions.autodetection.enabled = true
+                    junit.jupiter.testinstance.lifecycle.default = per_class
+                    junit.jupiter.execution.parallel.enabled = false
+         </configurationParameters>
+          </properties>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!--      <plugin>-->
+      <!--        <artifactId>maven-antrun-plugin</artifactId>-->
+      <!--        <executions>-->
+      <!--          <execution>-->
+      <!--            <id>prepare-package-structure</id>-->
+      <!--            <phase>prepare-package</phase>-->
+      <!--            <goals>-->
+      <!--              <goal>run</goal>-->
+      <!--            </goals>-->
+      <!--            <configuration>-->
+      <!--              <target>-->
+      <!--                <mkdir dir="target/appassembler/scarti"/>-->
+      <!--                <mkdir dir="target/appassembler/logs"/>-->
+      <!--                <mkdir dir="target/appassembler/etc"/>-->
+      <!--                <mkdir dir="target/appassembler/bin"/>-->
+      <!--                <mkdir dir="target/appassembler/flussi_in"/>-->
+      <!--                <mkdir dir="target/appassembler/flussi_in/storico"/>-->
+      <!--                <mkdir dir="target/appassembler/flussi_out"/>-->
+      <!--                <mkdir dir="target/appassembler/flussi_out/storico"/>-->
+      <!--                <copy todir="target/appassembler/bin" flatten="true">-->
+      <!--                  <fileset dir="src/sh/"></fileset>-->
+      <!--                </copy>-->
+      <!--                <fixcrlf srcdir="target/appassembler/bin"-->
+      <!--                  includes="**/scrambling_*.sh"-->
+      <!--                  eol="lf"-->
+      <!--                  eof="remove"/>-->
+      <!--              </target>-->
+      <!--            </configuration>-->
+      <!--          </execution>-->
+      <!--        </executions>-->
+      <!--      </plugin>-->
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <version>${appassembler-maven-plugin.version}</version>
+        <configuration>
+          <configurationSourceDirectory>
+            src/main/resources/
+          </configurationSourceDirectory>
+          <copyConfigurationDirectory>true
+          </copyConfigurationDirectory>
+          <extraJvmArguments>-Xmx1024m -Dspring.profiles.active="$1"</extraJvmArguments>
+          <platforms>
+            <platform>unix</platform>
+          </platforms>
+          <binFileExtensions>
+            <unix>.sh</unix>
+          </binFileExtensions>
+          <programs>
+            <program>
+              <mainClass>
+                com.arca.albedo.scrambling.ScramblingApplication
+              </mainClass>
+              <id>scrambling</id>
+            </program>
+          </programs>
+          <repositoryLayout>flat</repositoryLayout>
+          <useWildcardClassPath>true</useWildcardClassPath>
+          <logsDirectory>logs</logsDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>assemble</id>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <appendAssemblyId>false</appendAssemblyId>
+              <descriptors>
+                <descriptor>src/main/resources/maven-assembly-plugin-config.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <!-- workaround to avoid errors in eclipse -->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>
+                      com.coveo
+                    </groupId>
+                    <artifactId>
+                      fmt-maven-plugin
+                    </artifactId>
+                    <versionRange>
+                      [${fmt-maven-plugin.version},)
+                    </versionRange>
+                    <goals>
+                      <goal>format</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 
 </project>
