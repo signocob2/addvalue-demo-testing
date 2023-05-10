@@ -188,38 +188,6 @@
         </executions>
       </plugin>
 
-      <!--      <plugin>-->
-      <!--        <artifactId>maven-antrun-plugin</artifactId>-->
-      <!--        <executions>-->
-      <!--          <execution>-->
-      <!--            <id>prepare-package-structure</id>-->
-      <!--            <phase>prepare-package</phase>-->
-      <!--            <goals>-->
-      <!--              <goal>run</goal>-->
-      <!--            </goals>-->
-      <!--            <configuration>-->
-      <!--              <target>-->
-      <!--                <mkdir dir="target/appassembler/scarti"/>-->
-      <!--                <mkdir dir="target/appassembler/logs"/>-->
-      <!--                <mkdir dir="target/appassembler/etc"/>-->
-      <!--                <mkdir dir="target/appassembler/bin"/>-->
-      <!--                <mkdir dir="target/appassembler/flussi_in"/>-->
-      <!--                <mkdir dir="target/appassembler/flussi_in/storico"/>-->
-      <!--                <mkdir dir="target/appassembler/flussi_out"/>-->
-      <!--                <mkdir dir="target/appassembler/flussi_out/storico"/>-->
-      <!--                <copy todir="target/appassembler/bin" flatten="true">-->
-      <!--                  <fileset dir="src/sh/"></fileset>-->
-      <!--                </copy>-->
-      <!--                <fixcrlf srcdir="target/appassembler/bin"-->
-      <!--                  includes="**/scrambling_*.sh"-->
-      <!--                  eol="lf"-->
-      <!--                  eof="remove"/>-->
-      <!--              </target>-->
-      <!--            </configuration>-->
-      <!--          </execution>-->
-      <!--        </executions>-->
-      <!--      </plugin>-->
-
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>appassembler-maven-plugin</artifactId>
