@@ -1,9 +1,9 @@
 package com.addvalue.demo.testing.batch.configurazione;
 
 import com.addvalue.demo.testing.batch.incrementer.CustomRunIncrementerId;
-import com.addvalue.demo.testing.batch.service.DipendenteService;
-import com.addvalue.demo.testing.batch.tasklet.ProduzioneResocontoAssenzeTasklet;
-import com.addvalue.demo.testing.batch.tasklet.ProduzioneResocontoStipendiTasklet;
+import com.addvalue.demo.testing.batch.classi_da_testare.service.DipendenteService;
+import com.addvalue.demo.testing.batch.classi_da_testare.tasklet.ProduzioneResocontoAssenzeTasklet;
+import com.addvalue.demo.testing.batch.classi_da_testare.tasklet.ProduzioneResocontoStipendiTasklet;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

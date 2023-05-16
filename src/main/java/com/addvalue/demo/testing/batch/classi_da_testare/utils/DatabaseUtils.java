@@ -1,4 +1,4 @@
-package com.addvalue.demo.testing.batch.utils;
+package com.addvalue.demo.testing.batch.classi_da_testare.utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

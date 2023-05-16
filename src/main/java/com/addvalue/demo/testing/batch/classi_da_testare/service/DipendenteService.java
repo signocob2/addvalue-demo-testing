@@ -1,7 +1,7 @@
-package com.addvalue.demo.testing.batch.service;
+package com.addvalue.demo.testing.batch.classi_da_testare.service;
 
 import com.addvalue.demo.testing.batch.domains.Dipendente;
-import com.addvalue.demo.testing.batch.rowmappers.DipendenteRowMapper;
+import com.addvalue.demo.testing.batch.classi_da_testare.rowmappers.DipendenteRowMapper;
 import javax.annotation.Resource;
 import lombok.Setter;
 import org.springframework.dao.EmptyResultDataAccessException;

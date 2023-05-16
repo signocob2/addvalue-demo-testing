@@ -1,8 +1,8 @@
-package com.addvalue.demo.testing.batch.rowmappers;
+package com.addvalue.demo.testing.batch.classi_da_testare.rowmappers;
 
-import static com.addvalue.demo.testing.batch.utils.DatabaseUtils.recuperaBigDecimal;
-import static com.addvalue.demo.testing.batch.utils.DatabaseUtils.recuperaData;
-import static com.addvalue.demo.testing.batch.utils.DatabaseUtils.recuperaStringa;
+import static com.addvalue.demo.testing.batch.classi_da_testare.utils.DatabaseUtils.recuperaBigDecimal;
+import static com.addvalue.demo.testing.batch.classi_da_testare.utils.DatabaseUtils.recuperaData;
+import static com.addvalue.demo.testing.batch.classi_da_testare.utils.DatabaseUtils.recuperaStringa;
 
 import com.addvalue.demo.testing.batch.domains.Dipendente;
 import com.addvalue.demo.testing.batch.domains.Stipendio;
