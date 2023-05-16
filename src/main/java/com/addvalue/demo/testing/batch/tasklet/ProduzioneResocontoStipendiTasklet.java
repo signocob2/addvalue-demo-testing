@@ -6,8 +6,10 @@ import com.addvalue.demo.testing.batch.domains.Stipendio;
 import com.addvalue.demo.testing.batch.exceptions.TestingException;
 import com.addvalue.demo.testing.batch.rowmappers.StipendioRowMapper;
 import com.addvalue.demo.testing.batch.service.DipendenteService;
+import com.addvalue.demo.testing.batch.utils.ScritturaFileUtils;
 import java.io.File;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Resource;
@@ -26,6 +28,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 @Log4j2
 public class ProduzioneResocontoStipendiTasklet implements Tasklet {
 
+  public static final String HEADER_FILE_RESOCONTO_STIPENDI =
+      "Matricola;Nome;Cognome;Importo;Data inizio;Data fine";
+
+  public static final String PERCORSO_ASSOLUTO_FILE_RESOCONTO_STIPENDI =
+      "C:\\Users\\marco.signorini\\OneDrive - ADD VALUE SPA\\Desktop\\Seminario Testing\\resoconto_stipendi.csv";
+
   @Resource private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   private DipendenteService dipendenteService;
@@ -33,22 +41,38 @@ public class ProduzioneResocontoStipendiTasklet implements Tasklet {
   @Override
   public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) {
 
-    final List<Stipendio> stipendi = recuperaStipendi();
+    List<Stipendio> stipendi = recuperaStipendiAttuali();
 
-    valorizzaNominativiDipendenti(stipendi);
+    valorizzaDipendenti(stipendi);
 
     scriviFileResocontoStipendi(stipendi);
 
     return RepeatStatus.FINISHED;
   }
 
-  private List<Stipendio> recuperaStipendi() {
+  private List<Stipendio> recuperaStipendiAttuali() {
     return this.namedParameterJdbcTemplate.query(
-        "SELECT MATRICOLA, IMPORTO, DATA_INIZIO, DATA_FINE FROM STIPENDI",
+        "SELECT A.MATRICOLA, A.IMPORTO, A.DATA_INIZIO, A.DATA_FINE"
+            + " FROM STIPENDI A"
+            + " WHERE NOT EXISTS (SELECT 1"
+            + "                    FROM STIPENDI B"
+            + "                   WHERE B.MATRICOLA = A.MATRICOLA"
+            + "                     AND B.DATA_FINE > A.DATA_FINE"
+            + "                 )",
         new StipendioRowMapper());
   }
 
-  private void valorizzaNominativiDipendenti(List<Stipendio> stipendi) {
+  //  private void filtraSoloStipendiAttuali(List<Stipendio> stipendi) {
+  //    return stipendi.stream()
+  //        .collect(
+  //            Collectors.toMap(
+  //                s -> s.getDipendente().getMatricola(),
+  //                s -> s,
+  //                (s1, s2) -> s1.getDataFine().isAfter(s2.getDataFine()) ? s1 : s2))
+  //        .values();
+  //  }
+
+  private void valorizzaDipendenti(List<Stipendio> stipendi) {
     stipendi.forEach(
         stipendio ->
             stipendio.setDipendente(
@@ -57,7 +81,9 @@ public class ProduzioneResocontoStipendiTasklet implements Tasklet {
   }
 
   private void scriviFileResocontoStipendi(List<Stipendio> stipendi) {
-    final File fileResocontoStipendi = ottieniFileSuCuiScrivere();
+    final File fileResocontoStipendi =
+        ScritturaFileUtils.ottieniFileSuCuiScrivere(
+            PERCORSO_ASSOLUTO_FILE_RESOCONTO_STIPENDI, HEADER_FILE_RESOCONTO_STIPENDI);
 
     stipendi.forEach(
         stipendio -> {
@@ -70,8 +96,8 @@ public class ProduzioneResocontoStipendiTasklet implements Tasklet {
                             stipendio.getDipendente().getNome(),
                             stipendio.getDipendente().getCognome(),
                             stipendio.getImporto(),
-                            stipendio.getDataInizio(),
-                            stipendio.getDataFine()),
+                            stipendio.getDataInizio().format(DateTimeFormatter.ISO_DATE),
+                            stipendio.getDataFine().format(DateTimeFormatter.ISO_DATE)),
                         ";")
                     + System.lineSeparator(),
                 UTF_8,
@@ -81,23 +107,5 @@ public class ProduzioneResocontoStipendiTasklet implements Tasklet {
                 "Impossibile svuotare il file degli scarti: " + ExceptionUtils.getStackTrace(e));
           }
         });
-  }
-
-  private File ottieniFileSuCuiScrivere() {
-    File fileResocontoStipendi =
-        new File(
-            "C:\\Users\\marco.signorini\\OneDrive - ADD VALUE SPA\\Desktop\\Seminario Testing\\resocontoStipendi.csv");
-
-    try {
-      FileUtils.writeStringToFile(
-          fileResocontoStipendi,
-          "matricola;nome;cognome;importo;dataInizio;dataFine" + System.lineSeparator(),
-          UTF_8,
-          false);
-    } catch (IOException e) {
-      throw new TestingException(
-          "Impossibile scrivere nel file degli scarti: " + ExceptionUtils.getStackTrace(e));
-    }
-    return fileResocontoStipendi;
   }
 }

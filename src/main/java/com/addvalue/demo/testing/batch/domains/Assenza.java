@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class Assenza {
 
-  private String matricola;
+  private Dipendente dipendente;
 
   private LocalDate dataAssenza;
 }
