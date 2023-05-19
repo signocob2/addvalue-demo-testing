@@ -24,8 +24,7 @@ import org.mockito.MockitoAnnotations;
 
 class DatabaseUtilsTest {
 
-  @Mock
-  private ResultSet resultSet;
+  @Mock private ResultSet resultSet;
 
   @BeforeEach
   public void before() {
@@ -33,9 +32,10 @@ class DatabaseUtilsTest {
     resultSet = Mockito.mock(ResultSet.class);
   }
 
-//  ===============================================================================================
-//                                         recuperaStringa
-//  ===============================================================================================
+  //
+  // ===============================================================================================
+  //                                         recuperaStringa
+  // ===============================================================================================
 
   @Test
   void recuperaStringa_stringaNullADb_vieneRestituitaUnaStringaVuota() throws SQLException {
@@ -76,15 +76,17 @@ class DatabaseUtilsTest {
 
   @ParameterizedTest
   @MethodSource("recuperaStringa_colonnaEsistenteADb")
-  void recuperaStringa_colonnaEsistenteADb_vieneRestituitoIlValoreCorretto(String valoreColonnaDb,
-      String valoreAtteso) throws SQLException {
+  void recuperaStringa_colonnaEsistenteADb_vieneRestituitoIlValoreCorretto(
+      String valoreColonnaDb, String valoreAtteso) throws SQLException {
     Mockito.when(resultSet.getString("COLONNA1")).thenReturn(valoreColonnaDb);
 
     assertThat(recuperaStringa(resultSet, "COLONNA1")).isEqualTo(valoreAtteso);
   }
 
   private static Stream<Arguments> recuperaStringa_colonnaEsistenteADb() {
-    return Stream.of(Arguments.arguments(null, ""), Arguments.arguments("    ", ""),
+    return Stream.of(
+        Arguments.arguments(null, ""),
+        Arguments.arguments("    ", ""),
         Arguments.arguments("", ""),
         Arguments.arguments("VALORE_DELLA_STRINGA", "VALORE_DELLA_STRINGA"),
         Arguments.arguments(" VALORE_DELLA_STRINGA   ", "VALORE_DELLA_STRINGA"));
@@ -98,10 +100,10 @@ class DatabaseUtilsTest {
     assertThrows(TestingException.class, () -> recuperaStringa(resultSet, "COLONNA1"));
   }
 
-
-//  ===============================================================================================
-//                                         recuperaBigDecimal
-//  ===============================================================================================
+  //
+  // ===============================================================================================
+  //                                         recuperaBigDecimal
+  // ===============================================================================================
 
   @ParameterizedTest
   @MethodSource("recuperaBigDecimal_colonnaEsistenteADb")
@@ -113,7 +115,8 @@ class DatabaseUtilsTest {
   }
 
   private static Stream<Arguments> recuperaBigDecimal_colonnaEsistenteADb() {
-    return Stream.of(Arguments.arguments(null, "0.00"),
+    return Stream.of(
+        Arguments.arguments(null, "0.00"),
         Arguments.arguments(BigDecimal.ZERO, new BigDecimal("0.00")),
         Arguments.arguments(new BigDecimal("123.123"), new BigDecimal("123.12")),
         Arguments.arguments(new BigDecimal("123.125"), new BigDecimal("123.13")),
@@ -123,38 +126,38 @@ class DatabaseUtilsTest {
   @Test
   void recuperaBigDecimal_colonnaNonEsistenteADb_vieneGenerataUnaTestingException()
       throws SQLException {
-    Mockito.when(resultSet.getString("COLONNA1")).thenThrow(new SQLException());
+    Mockito.when(resultSet.getBigDecimal("COLONNA1")).thenThrow(new SQLException());
 
     assertThrows(TestingException.class, () -> recuperaBigDecimal(resultSet, "COLONNA1", 2));
   }
 
-//  ===============================================================================================
-//                                         recuperaData
-//  ===============================================================================================
+  //
+  // ===============================================================================================
+  //                                         recuperaData
+  // ===============================================================================================
 
   @ParameterizedTest
   @MethodSource("recuperaData_colonnaEsistenteADb")
-  void recuperaData_colonnaEsistenteADb_vieneRestituitoIlValoreCorretto(Date valoreColonnaDb,
-      LocalDate valoreAtteso) throws SQLException {
+  void recuperaData_colonnaEsistenteADb_vieneRestituitoIlValoreCorretto(
+      Date valoreColonnaDb, LocalDate valoreAtteso) throws SQLException {
     Mockito.when(resultSet.getDate("COLONNA1")).thenReturn(valoreColonnaDb);
 
     assertThat(recuperaData(resultSet, "COLONNA1")).isEqualTo(valoreAtteso);
   }
 
   private static Stream<Arguments> recuperaData_colonnaEsistenteADb() {
-    return Stream.of(Arguments.arguments(null, LocalDate.of(1, 1, 1)),
-        Arguments.arguments(new Date(LocalDate.of(1, 1, 1).to), LocalDate.of(1, 1, 1)),
-        Arguments.arguments(),
-        Arguments.arguments(LocalDate.of(2020, 5, 3), LocalDate.of(2020, 5, 3)),
-        Arguments.arguments(new BigDecimal("123.125"), new BigDecimal("123.13")),
-        Arguments.arguments(new BigDecimal("123.88"), new BigDecimal("123.88")));
+    return Stream.of(
+        Arguments.arguments(null, LocalDate.of(1, 1, 1)),
+        Arguments.arguments(Date.valueOf(LocalDate.of(1, 1, 1)), LocalDate.of(1, 1, 1)),
+        Arguments.arguments(Date.valueOf(LocalDate.of(9999, 12, 31)), LocalDate.of(9999, 12, 31)),
+        Arguments.arguments(Date.valueOf(LocalDate.of(2000, 5, 5)), LocalDate.of(2000, 5, 5)),
+        Arguments.arguments(Date.valueOf(LocalDate.of(2023, 2, 3)), LocalDate.of(2023, 2, 3)));
   }
 
   @Test
   void recuperaData_colonnaNonEsistenteADb_vieneGenerataUnaTestingException() throws SQLException {
-    Mockito.when(resultSet.getString("COLONNA1")).thenThrow(new SQLException());
+    Mockito.when(resultSet.getDate("COLONNA1")).thenThrow(new SQLException());
 
     assertThrows(TestingException.class, () -> recuperaData(resultSet, "COLONNA1"));
   }
-
 }
