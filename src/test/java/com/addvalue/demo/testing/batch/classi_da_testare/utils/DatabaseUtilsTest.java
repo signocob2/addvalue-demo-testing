@@ -13,24 +13,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 class DatabaseUtilsTest {
 
-  @Mock private ResultSet resultSet;
-
-  @BeforeEach
-  public void before() {
-    MockitoAnnotations.openMocks(this);
-    resultSet = Mockito.mock(ResultSet.class);
-  }
+  private final ResultSet resultSet = Mockito.mock(ResultSet.class);
 
   //
   // ===============================================================================================
