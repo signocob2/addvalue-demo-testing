@@ -2,11 +2,11 @@ package com.addvalue.demo.testing.batch.classi_da_testare.tasklet;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import com.addvalue.demo.testing.batch.domains.Assenza;
-import com.addvalue.demo.testing.batch.exceptions.TestingException;
 import com.addvalue.demo.testing.batch.classi_da_testare.rowmappers.AssenzaRowMapper;
 import com.addvalue.demo.testing.batch.classi_da_testare.service.DipendenteService;
 import com.addvalue.demo.testing.batch.classi_da_testare.utils.ScritturaFileUtils;
+import com.addvalue.demo.testing.batch.domains.Assenza;
+import com.addvalue.demo.testing.batch.exceptions.TestingException;
 import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;

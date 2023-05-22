@@ -2,11 +2,11 @@ package com.addvalue.demo.testing.batch.classi_da_testare.tasklet;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import com.addvalue.demo.testing.batch.domains.Stipendio;
-import com.addvalue.demo.testing.batch.exceptions.TestingException;
 import com.addvalue.demo.testing.batch.classi_da_testare.rowmappers.StipendioRowMapper;
 import com.addvalue.demo.testing.batch.classi_da_testare.service.DipendenteService;
 import com.addvalue.demo.testing.batch.classi_da_testare.utils.ScritturaFileUtils;
+import com.addvalue.demo.testing.batch.domains.Stipendio;
+import com.addvalue.demo.testing.batch.exceptions.TestingException;
 import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -61,16 +61,6 @@ public class ProduzioneResocontoStipendiTasklet implements Tasklet {
             + "                 )",
         new StipendioRowMapper());
   }
-
-  //  private void filtraSoloStipendiAttuali(List<Stipendio> stipendi) {
-  //    return stipendi.stream()
-  //        .collect(
-  //            Collectors.toMap(
-  //                s -> s.getDipendente().getMatricola(),
-  //                s -> s,
-  //                (s1, s2) -> s1.getDataFine().isAfter(s2.getDataFine()) ? s1 : s2))
-  //        .values();
-  //  }
 
   private void valorizzaDipendenti(List<Stipendio> stipendi) {
     stipendi.forEach(
