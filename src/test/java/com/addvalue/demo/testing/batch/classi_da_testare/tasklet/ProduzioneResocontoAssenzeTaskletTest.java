@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
+import com.addvalue.demo.testing.batch.classi_da_testare.service.DipendenteService;
 import com.addvalue.demo.testing.batch.domains.Assenza;
 import com.addvalue.demo.testing.batch.domains.Dipendente;
 import com.addvalue.demo.testing.batch.exceptions.TestingException;
@@ -31,15 +32,19 @@ class ProduzioneResocontoAssenzeTaskletTest {
 
   private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+  private DipendenteService dipendenteService;
+
   @BeforeEach
   public void before() {
     MockitoAnnotations.openMocks(this);
     namedParameterJdbcTemplate = Mockito.mock(NamedParameterJdbcTemplate.class);
+    dipendenteService = Mockito.mock(DipendenteService.class);
 
     produzioneResocontoAssenzeTasklet = new ProduzioneResocontoAssenzeTasklet();
     produzioneResocontoAssenzeTasklet.setPercorsoAssolutoFileResocontoAssenze(
         directoryTemporanea.getAbsolutePath() + "/mioFile.csv");
     produzioneResocontoAssenzeTasklet.setNamedParameterJdbcTemplate(namedParameterJdbcTemplate);
+    produzioneResocontoAssenzeTasklet.setDipendenteService(dipendenteService);
   }
 
   @Test
@@ -76,6 +81,9 @@ class ProduzioneResocontoAssenzeTaskletTest {
             Collections.singletonList(
                 new Assenza(
                     new Dipendente("ABC", "MARCO", "SIGNORINI"), LocalDate.of(2023, 5, 5))));
+    Mockito.when(dipendenteService.ottieniDipendenteDaMatricola("ABC"))
+        .thenReturn(new Dipendente("ABC", "MARCO", "SIGNORINI"));
+
     final RepeatStatus repeatStatus = produzioneResocontoAssenzeTasklet.execute(null, null);
 
     assertThat(
@@ -84,7 +92,8 @@ class ProduzioneResocontoAssenzeTaskletTest {
         .isEqualTo(
             ProduzioneResocontoAssenzeTasklet.HEADER_FILE_RESOCONTO_ASSENZE
                 + System.lineSeparator()
-                + "ABC;MARCO;SIGNORINI;2023-05-05");
+                + "ABC;MARCO;SIGNORINI;2023-05-05"
+                + System.lineSeparator());
     assertThat(repeatStatus).isEqualTo(RepeatStatus.FINISHED);
   }
 }
