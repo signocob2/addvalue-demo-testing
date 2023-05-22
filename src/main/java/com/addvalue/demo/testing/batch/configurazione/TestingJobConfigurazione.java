@@ -1,9 +1,9 @@
 package com.addvalue.demo.testing.batch.configurazione;
 
-import com.addvalue.demo.testing.batch.incrementer.CustomRunIncrementerId;
 import com.addvalue.demo.testing.batch.classi_da_testare.service.DipendenteService;
 import com.addvalue.demo.testing.batch.classi_da_testare.tasklet.ProduzioneResocontoAssenzeTasklet;
 import com.addvalue.demo.testing.batch.classi_da_testare.tasklet.ProduzioneResocontoStipendiTasklet;
+import com.addvalue.demo.testing.batch.incrementer.CustomRunIncrementerId;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -19,6 +19,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 @EnableBatchProcessing
 @Log4j2
 public class TestingJobConfigurazione {
+
+  public static final String PERCORSO_ASSOLUTO_FILE_RESOCONTO_STIPENDI =
+      "C:\\Users\\marco.signorini\\OneDrive - ADD VALUE SPA\\Desktop\\Seminario Testing\\resoconto_stipendi.csv";
+
+  public static final String PERCORSO_ASSOLUTO_FILE_RESOCONTO_ASSENZE =
+      "C:\\Users\\marco.signorini\\OneDrive - ADD VALUE SPA\\Desktop\\Seminario Testing\\resoconto_assenze.csv";
 
   @Bean
   public Job testing(
@@ -49,8 +55,10 @@ public class TestingJobConfigurazione {
   public ProduzioneResocontoStipendiTasklet produzioneResocontoStipendiTasklet(
       NamedParameterJdbcTemplate namedJdbcTemplate, DipendenteService dipendenteService) {
 
-    ProduzioneResocontoStipendiTasklet produzioneResocontoStipendiTasklet =
+    final ProduzioneResocontoStipendiTasklet produzioneResocontoStipendiTasklet =
         new ProduzioneResocontoStipendiTasklet();
+    produzioneResocontoStipendiTasklet.setPercorsoAssolutoFileResocontoStipendi(
+        PERCORSO_ASSOLUTO_FILE_RESOCONTO_STIPENDI);
 
     produzioneResocontoStipendiTasklet.setNamedParameterJdbcTemplate(namedJdbcTemplate);
     produzioneResocontoStipendiTasklet.setDipendenteService(dipendenteService);
@@ -73,8 +81,10 @@ public class TestingJobConfigurazione {
   public ProduzioneResocontoAssenzeTasklet produzioneResocontoAssenzeTasklet(
       NamedParameterJdbcTemplate namedJdbcTemplate, DipendenteService dipendenteService) {
 
-    ProduzioneResocontoAssenzeTasklet produzioneResocontoAssenzeTasklet =
+    final ProduzioneResocontoAssenzeTasklet produzioneResocontoAssenzeTasklet =
         new ProduzioneResocontoAssenzeTasklet();
+    produzioneResocontoAssenzeTasklet.setPercorsoAssolutoFileResocontoAssenze(
+        PERCORSO_ASSOLUTO_FILE_RESOCONTO_ASSENZE);
 
     produzioneResocontoAssenzeTasklet.setNamedParameterJdbcTemplate(namedJdbcTemplate);
     produzioneResocontoAssenzeTasklet.setDipendenteService(dipendenteService);

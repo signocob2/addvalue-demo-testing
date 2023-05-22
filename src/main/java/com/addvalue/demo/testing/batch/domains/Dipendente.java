@@ -1,10 +1,12 @@
 package com.addvalue.demo.testing.batch.domains;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Dipendente {
 
   private String matricola;

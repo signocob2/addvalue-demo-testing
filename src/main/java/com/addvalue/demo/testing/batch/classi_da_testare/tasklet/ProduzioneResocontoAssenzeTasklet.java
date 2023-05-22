@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Resource;
 import lombok.Data;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,13 +26,13 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 @Data
+@Setter
 @Log4j2
 public class ProduzioneResocontoAssenzeTasklet implements Tasklet {
 
   public static final String HEADER_FILE_RESOCONTO_ASSENZE = "Matricola;Nome;Cognome;Data assenza";
 
-  public static final String PERCORSO_ASSOLUTO_FILE_RESOCONTO_ASSENZE =
-      "C:\\Users\\marco.signorini\\OneDrive - ADD VALUE SPA\\Desktop\\Seminario Testing\\resoconto_assenze.csv";
+  private String percorsoAssolutoFileResocontoAssenze;
 
   @Resource private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -39,6 +40,10 @@ public class ProduzioneResocontoAssenzeTasklet implements Tasklet {
 
   @Override
   public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) {
+    if (StringUtils.isBlank(percorsoAssolutoFileResocontoAssenze)) {
+      throw new TestingException("percorsoAssolutoFileResocontoAssenze non valorizzato");
+    }
+
     final List<Assenza> assenze = recuperaAssenze();
 
     valorizzaDipendenti(assenze);
@@ -64,7 +69,7 @@ public class ProduzioneResocontoAssenzeTasklet implements Tasklet {
   private void scriviFileResocontoAssenze(List<Assenza> assenze) {
     final File fileResocontoAssenze =
         ScritturaFileUtils.ottieniFileSuCuiScrivere(
-            PERCORSO_ASSOLUTO_FILE_RESOCONTO_ASSENZE, HEADER_FILE_RESOCONTO_ASSENZE);
+            percorsoAssolutoFileResocontoAssenze, HEADER_FILE_RESOCONTO_ASSENZE);
 
     assenze.forEach(
         assenza -> {
