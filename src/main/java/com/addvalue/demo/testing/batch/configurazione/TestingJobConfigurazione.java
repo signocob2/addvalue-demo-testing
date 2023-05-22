@@ -29,23 +29,23 @@ public class TestingJobConfigurazione {
   @Bean
   public Job testing(
       JobBuilderFactory jobBuilderFactory,
-      Step produzioneResocontoStipendi,
-      Step produzioneResocontoAssenze) {
+      Step produzioneResocontoStipendiStep,
+      Step produzioneResocontoAssenzeStep) {
     return jobBuilderFactory
         .get("testing")
         .incrementer(new CustomRunIncrementerId())
         .preventRestart()
-        .start(produzioneResocontoStipendi)
-        .next(produzioneResocontoAssenze)
+        .start(produzioneResocontoStipendiStep)
+        .next(produzioneResocontoAssenzeStep)
         .build();
   }
 
   @Bean
-  public Step produzioneResocontoStipendi(
+  public Step produzioneResocontoStipendiStep(
       StepBuilderFactory stepBuilderFactory,
       ProduzioneResocontoStipendiTasklet produzioneResocontoStipendiTasklet) {
     return stepBuilderFactory
-        .get("produzioneResocontoStipendi")
+        .get("produzioneResocontoStipendiStep")
         .tasklet(produzioneResocontoStipendiTasklet)
         .build();
   }
@@ -67,11 +67,11 @@ public class TestingJobConfigurazione {
   }
 
   @Bean
-  public Step produzioneResocontoAssenze(
+  public Step produzioneResocontoAssenzeStep(
       StepBuilderFactory stepBuilderFactory,
       ProduzioneResocontoAssenzeTasklet produzioneResocontoAssenzeTasklet) {
     return stepBuilderFactory
-        .get("produzioneResocontoStipendi")
+        .get("produzioneResocontoAssenzeStep")
         .tasklet(produzioneResocontoAssenzeTasklet)
         .build();
   }
