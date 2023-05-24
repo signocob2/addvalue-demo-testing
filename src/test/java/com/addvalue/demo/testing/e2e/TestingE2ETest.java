@@ -4,7 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.batch.core.BatchStatus.COMPLETED;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import javax.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,6 +64,23 @@ class TestingE2ETest {
   void application_lancioBatch_ilBatchTerminaInStatoCompleted() throws Exception {
     JobExecution jobExecution = jobLauncherTestUtils.launchJob();
 
+    assertThat(stepLanciato(jobExecution, "produzioneResocontoStipendiStep")).isTrue();
+    assertThat(stepLanciato(jobExecution, "produzioneResocontoAssenzeStep")).isTrue();
+    assertThat(
+            Files.exists(
+                Paths.get(
+                    "C:\\Users\\marco.signorini\\OneDrive - ADD VALUE SPA\\Desktop\\Seminario Testing\\resoconto_stipendi.csv")))
+        .isTrue();
+    assertThat(
+            Files.exists(
+                Paths.get(
+                    "C:\\Users\\marco.signorini\\OneDrive - ADD VALUE SPA\\Desktop\\Seminario Testing\\resoconto_assenze.csv")))
+        .isTrue();
     assertThat(jobExecution.getStatus()).isEqualTo(COMPLETED);
+  }
+
+  private static boolean stepLanciato(JobExecution jobExecution, String nomeStep) {
+    return jobExecution.getStepExecutions().stream()
+        .anyMatch(stepExecution -> StringUtils.equals(stepExecution.getStepName(), nomeStep));
   }
 }

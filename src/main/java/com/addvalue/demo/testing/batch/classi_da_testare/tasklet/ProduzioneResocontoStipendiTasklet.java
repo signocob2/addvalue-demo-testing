@@ -2,11 +2,11 @@ package com.addvalue.demo.testing.batch.classi_da_testare.tasklet;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import com.addvalue.demo.testing.batch.domains.Stipendio;
-import com.addvalue.demo.testing.batch.exceptions.TestingException;
 import com.addvalue.demo.testing.batch.classi_da_testare.rowmappers.StipendioRowMapper;
 import com.addvalue.demo.testing.batch.classi_da_testare.service.DipendenteService;
 import com.addvalue.demo.testing.batch.classi_da_testare.utils.ScritturaFileUtils;
+import com.addvalue.demo.testing.batch.domains.Stipendio;
+import com.addvalue.demo.testing.batch.exceptions.TestingException;
 import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Resource;
 import lombok.Data;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,14 +26,14 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 @Data
+@Setter
 @Log4j2
 public class ProduzioneResocontoStipendiTasklet implements Tasklet {
 
   public static final String HEADER_FILE_RESOCONTO_STIPENDI =
       "Matricola;Nome;Cognome;Importo;Data inizio;Data fine";
 
-  public static final String PERCORSO_ASSOLUTO_FILE_RESOCONTO_STIPENDI =
-      "C:\\Users\\marco.signorini\\OneDrive - ADD VALUE SPA\\Desktop\\Seminario Testing\\resoconto_stipendi.csv";
+  private String percorsoAssolutoFileResocontoStipendi;
 
   @Resource private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -40,6 +41,9 @@ public class ProduzioneResocontoStipendiTasklet implements Tasklet {
 
   @Override
   public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) {
+    if (StringUtils.isBlank(percorsoAssolutoFileResocontoStipendi)) {
+      throw new TestingException("percorsoAssolutoFileResocontoStipendi non valorizzato");
+    }
 
     List<Stipendio> stipendi = recuperaStipendiAttuali();
 
@@ -62,16 +66,6 @@ public class ProduzioneResocontoStipendiTasklet implements Tasklet {
         new StipendioRowMapper());
   }
 
-  //  private void filtraSoloStipendiAttuali(List<Stipendio> stipendi) {
-  //    return stipendi.stream()
-  //        .collect(
-  //            Collectors.toMap(
-  //                s -> s.getDipendente().getMatricola(),
-  //                s -> s,
-  //                (s1, s2) -> s1.getDataFine().isAfter(s2.getDataFine()) ? s1 : s2))
-  //        .values();
-  //  }
-
   private void valorizzaDipendenti(List<Stipendio> stipendi) {
     stipendi.forEach(
         stipendio ->
@@ -83,7 +77,7 @@ public class ProduzioneResocontoStipendiTasklet implements Tasklet {
   private void scriviFileResocontoStipendi(List<Stipendio> stipendi) {
     final File fileResocontoStipendi =
         ScritturaFileUtils.ottieniFileSuCuiScrivere(
-            PERCORSO_ASSOLUTO_FILE_RESOCONTO_STIPENDI, HEADER_FILE_RESOCONTO_STIPENDI);
+            percorsoAssolutoFileResocontoStipendi, HEADER_FILE_RESOCONTO_STIPENDI);
 
     stipendi.forEach(
         stipendio -> {
