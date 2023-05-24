@@ -25,17 +25,17 @@ public class DatabaseUtils {
     } catch (SQLException e) {
       throw new TestingException(ExceptionUtils.getMessage(e));
     }
-
   }
 
-  public static BigDecimal recuperaBigDecimal(ResultSet resultSet, String nomeColonna,
-      int numeroCifreDecimali) {
+  public static BigDecimal recuperaBigDecimal(
+      ResultSet resultSet, String nomeColonna, int numeroCifreDecimali) {
 
     try {
 
       final BigDecimal valore = resultSet.getBigDecimal(nomeColonna);
 
-      return Objects.nonNull(valore) ? valore.setScale(numeroCifreDecimali, RoundingMode.HALF_UP)
+      return Objects.nonNull(valore)
+          ? valore.setScale(numeroCifreDecimali, RoundingMode.HALF_UP)
           : BigDecimal.ZERO.setScale(numeroCifreDecimali, RoundingMode.HALF_UP);
     } catch (SQLException e) {
       throw new TestingException(ExceptionUtils.getMessage(e));
@@ -53,5 +53,4 @@ public class DatabaseUtils {
       throw new TestingException(ExceptionUtils.getMessage(e));
     }
   }
-
 }

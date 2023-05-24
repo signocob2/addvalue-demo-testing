@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -21,7 +22,12 @@ import org.mockito.Mockito;
 
 class DatabaseUtilsTest {
 
-  private final ResultSet resultSet = Mockito.mock(ResultSet.class);
+  private ResultSet resultSet;
+
+  @BeforeEach
+  public void inizializzaContesto() {
+    resultSet = Mockito.mock(ResultSet.class);
+  }
 
   //
   // ===============================================================================================
