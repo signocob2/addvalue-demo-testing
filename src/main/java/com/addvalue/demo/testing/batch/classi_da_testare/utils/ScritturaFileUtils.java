@@ -15,10 +15,6 @@ public class ScritturaFileUtils {
 
   public static File ottieniFileSuCuiScrivere(String percorsoAssolutoFile, String headerFile)
       throws TestingException {
-    if (StringUtils.isBlank(percorsoAssolutoFile)) {
-      throw new TestingException("Percorso assoluto file non valorizzato");
-    }
-
     final File fileResocontoStipendi = creaFile(percorsoAssolutoFile);
 
     scriviHeader(headerFile, fileResocontoStipendi);

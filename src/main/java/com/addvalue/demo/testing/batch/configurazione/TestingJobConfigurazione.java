@@ -21,10 +21,10 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 public class TestingJobConfigurazione {
 
   public static final String PERCORSO_ASSOLUTO_FILE_RESOCONTO_STIPENDI =
-      "C:\\Users\\marco.signorini\\OneDrive - ADD VALUE SPA\\Desktop\\Seminario Testing\\resoconto_stipendi.csv";
+      "C:/Users/marco.signorini/Desktop/Seminario Testing/2024/resoconto_stipendi.csv";
 
   public static final String PERCORSO_ASSOLUTO_FILE_RESOCONTO_ASSENZE =
-      "C:\\Users\\marco.signorini\\OneDrive - ADD VALUE SPA\\Desktop\\Seminario Testing\\resoconto_assenze.csv";
+      "C:/Users/marco.signorini/Desktop/Seminario Testing/2024/resoconto_assenze.csv";
 
   @Bean
   public Job testing(
