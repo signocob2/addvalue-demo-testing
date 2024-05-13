@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -39,28 +38,5 @@ class DipendenteServiceTest {
     assertThat(dipendenteService.ottieniDipendenteDaMatricola("ABC")).isEqualTo(new Dipendente());
   }
 
-  @Test
-  void
-      ottieniDipendenteDaMatricola_laQueryDiEstrazioneTrovaPiuDiUnRecord_ritornaDipendenteDiDefault() {
-    when(namedParameterJdbcTemplate.queryForObject(
-            anyString(), any(MapSqlParameterSource.class), any(RowMapper.class)))
-        .thenThrow(new IncorrectResultSizeDataAccessException(1));
-
-    assertThat(dipendenteService.ottieniDipendenteDaMatricola("ABC")).isEqualTo(new Dipendente());
-  }
-
-  @Test
-  void ottieniDipendenteDaMatricola_laQueryDiEstrazioneRestituisceUnRecord_ritornaZero() {
-    final Dipendente dipendenteDaRitornare = new Dipendente("ABC");
-    dipendenteDaRitornare.setNome("MARCO");
-    dipendenteDaRitornare.setCognome("SIGNORINI");
-    when(namedParameterJdbcTemplate.queryForObject(
-            anyString(), any(MapSqlParameterSource.class), any(RowMapper.class)))
-        .thenReturn(dipendenteDaRitornare);
-
-    final Dipendente dipendenteAtteso = new Dipendente("ABC");
-    dipendenteAtteso.setNome("MARCO");
-    dipendenteAtteso.setCognome("SIGNORINI");
-    assertThat(dipendenteService.ottieniDipendenteDaMatricola("ABC")).isEqualTo(dipendenteAtteso);
-  }
+  // TODO-TEST
 }

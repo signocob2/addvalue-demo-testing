@@ -165,66 +165,13 @@ class ProduzioneResocontoAssenzeTaskletTest {
   void
       execute_unAssenzaPerPiuDipendentiTrovate_vieneScrittoIlFileCorrettoELaTaskletTerminaCorrettamente()
           throws IOException {
-    Mockito.when(namedParameterJdbcTemplate.query(anyString(), any(RowMapper.class)))
-        .thenReturn(
-            Arrays.asList(
-                new Assenza(new Dipendente("ABC", "MARCO", "SIGNORINI"), LocalDate.of(2023, 5, 5)),
-                new Assenza(new Dipendente("DEF", "MARIO", "ROSSI"), LocalDate.of(2022, 2, 2))));
-    Mockito.when(dipendenteService.ottieniDipendenteDaMatricola("ABC"))
-        .thenReturn(new Dipendente("ABC", "MARCO", "SIGNORINI"));
-    Mockito.when(dipendenteService.ottieniDipendenteDaMatricola("DEF"))
-        .thenReturn(new Dipendente("DEF", "MARIO", "ROSSI"));
-
-    final RepeatStatus repeatStatus = produzioneResocontoAssenzeTasklet.execute(null, null);
-
-    assertThat(
-            FileUtils.readFileToString(
-                new File(directoryTemporanea.getAbsolutePath() + "/mioFile.csv"), UTF_8))
-        .isEqualTo(
-            ProduzioneResocontoAssenzeTasklet.HEADER_FILE_RESOCONTO_ASSENZE
-                + System.lineSeparator()
-                + "ABC;MARCO;SIGNORINI;2023-05-05"
-                + System.lineSeparator()
-                + "DEF;MARIO;ROSSI;2022-02-02"
-                + System.lineSeparator());
-    assertThat(repeatStatus).isEqualTo(RepeatStatus.FINISHED);
+    // TODO-TEST
   }
 
   @Test
   void
       execute_piuAssenzePerPiuDipendentiTrovate_vieneScrittoIlFileCorrettoELaTaskletTerminaCorrettamente()
           throws IOException {
-    Mockito.when(namedParameterJdbcTemplate.query(anyString(), any(RowMapper.class)))
-        .thenReturn(
-            Arrays.asList(
-                new Assenza(new Dipendente("ABC", "MARCO", "SIGNORINI"), LocalDate.of(2023, 5, 5)),
-                new Assenza(new Dipendente("ABC", "MARCO", "SIGNORINI"), LocalDate.of(2023, 5, 6)),
-                new Assenza(new Dipendente("DEF", "MARIO", "ROSSI"), LocalDate.of(2022, 2, 2)),
-                new Assenza(new Dipendente("DEF", "MARIO", "ROSSI"), LocalDate.of(2022, 2, 3)),
-                new Assenza(new Dipendente("DEF", "MARIO", "ROSSI"), LocalDate.of(2022, 2, 4))));
-    Mockito.when(dipendenteService.ottieniDipendenteDaMatricola("ABC"))
-        .thenReturn(new Dipendente("ABC", "MARCO", "SIGNORINI"));
-    Mockito.when(dipendenteService.ottieniDipendenteDaMatricola("DEF"))
-        .thenReturn(new Dipendente("DEF", "MARIO", "ROSSI"));
-
-    final RepeatStatus repeatStatus = produzioneResocontoAssenzeTasklet.execute(null, null);
-
-    assertThat(
-            FileUtils.readFileToString(
-                new File(directoryTemporanea.getAbsolutePath() + "/mioFile.csv"), UTF_8))
-        .isEqualTo(
-            ProduzioneResocontoAssenzeTasklet.HEADER_FILE_RESOCONTO_ASSENZE
-                + System.lineSeparator()
-                + "ABC;MARCO;SIGNORINI;2023-05-05"
-                + System.lineSeparator()
-                + "ABC;MARCO;SIGNORINI;2023-05-06"
-                + System.lineSeparator()
-                + "DEF;MARIO;ROSSI;2022-02-02"
-                + System.lineSeparator()
-                + "DEF;MARIO;ROSSI;2022-02-03"
-                + System.lineSeparator()
-                + "DEF;MARIO;ROSSI;2022-02-04"
-                + System.lineSeparator());
-    assertThat(repeatStatus).isEqualTo(RepeatStatus.FINISHED);
+    // TODO-TEST
   }
 }

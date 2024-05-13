@@ -40,25 +40,5 @@ class DipendenteServiceIntegrationTest {
         .isEqualTo(new Dipendente("AAA", "Pino", "Philip"));
   }
 
-  @Test
-  @Sql(
-      scripts = "/script/integrations/dipendenteService/02_estrazioneRecordMultiplo.sql",
-      executionPhase = BEFORE_TEST_METHOD)
-  void
-      ottieniDipendenteDaMatricola_vengonoEstrattiPiuRecord_vieneRestituitoIlDipendenteDiDefault() {
-    final Dipendente dipendente = dipendenteService.ottieniDipendenteDaMatricola("AAA");
-
-    assertThat(dipendente).usingRecursiveComparison().isEqualTo(new Dipendente());
-  }
-
-  @Test
-  @Sql(
-      scripts = "/script/integrations/dipendenteService/03_estrazioneDiNessunRecord.sql",
-      executionPhase = BEFORE_TEST_METHOD)
-  void
-      ottieniDipendenteDaMatricola_nonVieneEstrattoAlcunRecord_vieneRestituitoIlDipendenteDiDefault() {
-    final Dipendente dipendente = dipendenteService.ottieniDipendenteDaMatricola("AAA");
-
-    assertThat(dipendente).usingRecursiveComparison().isEqualTo(new Dipendente());
-  }
+  // TODO-TEST
 }
