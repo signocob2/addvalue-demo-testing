@@ -1,6 +1,7 @@
 package com.addvalue.demo.testing.batch.classi_da_testare.utils;
 
 import static com.addvalue.demo.testing.batch.classi_da_testare.utils.ScritturaFileUtils.ottieniFileSuCuiScrivere;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -37,5 +38,16 @@ class ScritturaFileUtilsTest {
     }
   }
 
-  // Altri test?
+  @Test
+  void ottieniFileSuCuiScrivere_headerValorizzato_vieneCreatoIlFileConLHeader() throws IOException {
+    final File fileOttenuto =
+        ottieniFileSuCuiScrivere(
+            directoryTemporanea.getAbsolutePath() + "mioFile.csv", "headerTest");
+
+    assertThat(fileOttenuto).exists();
+    assertThat(FileUtils.readFileToString(fileOttenuto, "UTF-8"))
+        .isEqualTo("headerTest" + System.lineSeparator());
+  }
+
+  // TODO-TEST
 }
